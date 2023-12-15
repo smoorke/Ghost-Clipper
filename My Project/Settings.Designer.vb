@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Ghost_Clipper.My.MySettings
+        Friend ReadOnly Property Settings() As Global.GhostClipper.My.MySettings
             Get
-                Return Global.Ghost_Clipper.My.MySettings.Default
+                Return Global.GhostClipper.My.MySettings.Default
             End Get
         End Property
     End Module

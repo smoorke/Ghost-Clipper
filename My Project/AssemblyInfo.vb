@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Ghost Clipper")>
+<Assembly: AssemblyTitle("GhostClipper")>
 <Assembly: AssemblyDescription("Keep Mouse Clipped to Windowed GHOSTBUSTERS")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("Ghost Clipper")>
+<Assembly: AssemblyProduct("GhostClipper")>
 <Assembly: AssemblyCopyright("Copyright ©  2023")>
 <Assembly: AssemblyTrademark("")>
 

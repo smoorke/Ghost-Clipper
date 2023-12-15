@@ -47,20 +47,20 @@ Partial Class frmMain
         '
         Me.cmsTray.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.QuitToolStripMenuItem})
         Me.cmsTray.Name = "cmsTray"
-        Me.cmsTray.Size = New System.Drawing.Size(181, 48)
+        Me.cmsTray.Size = New System.Drawing.Size(98, 26)
         '
         'QuitToolStripMenuItem
         '
-        Me.QuitToolStripMenuItem.Image = Global.Ghost_Clipper.My.Resources.Resources.ghostbig_1_png
+        Me.QuitToolStripMenuItem.Image = Global.GhostClipper.My.Resources.Resources.ghostbig_1_png
         Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
-        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(97, 22)
         Me.QuitToolStripMenuItem.Text = "Quit"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(264, 64)
+        Me.ClientSize = New System.Drawing.Size(281, 142)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False

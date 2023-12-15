@@ -1,17 +1,19 @@
-# [Ghost Clipper](https://github.com/smoorke/Ghost-Clipper/releases/download/GhostClipper/GhostClipper.exe)
+# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/GhostClipper/GhostClipper.exe)
  Clip Mouse Cursor to Windowed GHOSTBUSTERS
  
  To set GHOSTBUSTERS to run in windowed mode, follow these steps:
 
-1. Create the folder `%LOCALAPPDATA%\GHOSTBUSTERS\`.
-2. Run and exit GHOSTBUSTERS so the `settings.ini` file gets created.
-3. In the `%LOCALAPPDATA%\GHOSTBUSTERS\settings.ini` file, change `runWindowed=0` to `runWindowed=1`.
-4. Run GHOSTBUSTERS again and set an appropriate resolution.
+1. Create the folder `%LOCALAPPDATA%\GHOSTBUSTERS\`
+2. Run and exit GHOSTBUSTERS so the `settings.ini` file gets created
+3. In the `%LOCALAPPDATA%\GHOSTBUSTERS\settings.ini` file, change `runWindowed=0` to `runWindowed=1`
+4. Run GHOSTBUSTERS again and set an appropriate resolution
 
- You can run Ghost Clipper before or after you have started GHOSTBUSTERS.
+ (note: the configuration file for the regular version of GHOSTBUSTERS is located at `%LOCALAPPDATA%\GHOSTBUSTERS (tm)\`
+
+ You can run GhostClipper before or after you have started GHOSTBUSTERS.
  
- To exit Ghost Clipper, right-click the GhostBuster icon in the system tray.
+ To exit GhostClipper, right-click the GhostBuster icon in the system tray.
  
- To move the GOSTBUSTERS window with Ghost Clipper running, press the Windows key, then drag the GHOSTBUSTERS caption.
+ To move the GOSTBUSTERS window with GhostClipper running, press the Windows key, then drag the GHOSTBUSTERS caption.
  
  (note: the mousecursor will be invisible when hovering GHOSTBUSTERS until you press the left mousebutton on the caption)
