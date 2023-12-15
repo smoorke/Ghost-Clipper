@@ -16,10 +16,11 @@ Public Class frmMain
             For Each pp As Process In Process.GetProcessesByName("ghost")
                 If pp.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then
                     hwnd = pp.MainWindowHandle
+                    Exit For
                 End If
             Next
+            m_clsMouseHook.hwnd = hwnd
             If hwnd <> IntPtr.Zero Then
-                m_clsMouseHook.hwnd = hwnd
                 GetClientRect(hwnd, m_clsMouseHook.rcC)
             End If
         Catch ex As Exception
