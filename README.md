@@ -1,4 +1,4 @@
-# Ghost Clipper
+# [Ghost Clipper](https://github.com/smoorke/Ghost-Clipper/releases/download/GhostClipper/GhostClipper.exe)
  Clip Mouse Cursor to Windowed GHOSTBUSTERS
  
  To set GHOSTBUSTERS to run in windowed mode, follow these steps:
