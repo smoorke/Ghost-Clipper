@@ -2,22 +2,14 @@
 Imports System.Runtime.InteropServices
 
 Public Class frmMain
-
-
-    Private WithEvents m_clsMouseHook As MouseHook = New MouseHook
-    Public Const WM_SYSCOMMAND = &H112
-    Public Const SC_MINIMIZE As Integer = &HF020
+    Private m_clsMouseHook As MouseHook = New MouseHook
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         m_clsMouseHook.HookMouse()
         trayIcon.Visible = True
     End Sub
-
-
-
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         m_clsMouseHook.UnhookMouse()
     End Sub
-
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         Try
             Dim hwnd = Process.GetProcessesByName("ghost")(0).MainWindowHandle
@@ -29,13 +21,11 @@ Public Class frmMain
             m_clsMouseHook.hwnd = IntPtr.Zero
         End Try
     End Sub
-
     Private Sub QuitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles QuitToolStripMenuItem.Click
         Me.Close()
     End Sub
-
     Private Sub frmMain_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        WindowState = FormWindowState.Minimized
+        Me.WindowState = FormWindowState.Minimized
     End Sub
     Protected Overrides ReadOnly Property CreateParams As CreateParams
         Get
@@ -46,7 +36,6 @@ Public Class frmMain
             Return cp
         End Get
     End Property
-
     Protected Overloads Overrides ReadOnly Property ShowWithoutActivation() As Boolean
         Get
             Return True
