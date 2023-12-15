@@ -12,11 +12,16 @@ Public Class frmMain
     End Sub
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         Try
-            Dim hwnd = Process.GetProcessesByName("ghost")(0).MainWindowHandle
-            m_clsMouseHook.hwnd = hwnd
-
-            GetClientRect(hwnd, m_clsMouseHook.rcC)
-
+            Dim hwnd = IntPtr.Zero
+            For Each pp As Process In Process.GetProcessesByName("ghost")
+                If pp.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then
+                    hwnd = pp.MainWindowHandle
+                End If
+            Next
+            If hwnd <> IntPtr.Zero Then
+                m_clsMouseHook.hwnd = hwnd
+                GetClientRect(hwnd, m_clsMouseHook.rcC)
+            End If
         Catch ex As Exception
             m_clsMouseHook.hwnd = IntPtr.Zero
         End Try
