@@ -10,7 +10,7 @@
 
  You can run Ghost Clipper before or after you have started GHOSTBUSTERS.
  
- To exit Ghost Clipper, right-click the GohstBuster icon in the system tray.
+ To exit Ghost Clipper, right-click the GhostBuster icon in the system tray.
  
  To move the GOSTBUSTERS window with Ghost Clipper running, press the Windows key, then drag the GHOSTBUSTERS caption.
  
