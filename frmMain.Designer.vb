@@ -24,10 +24,13 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
+        Dim ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
         Me.trayIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.cmsTray = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SaveLocationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.QuitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cmsTray.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -45,15 +48,29 @@ Partial Class frmMain
         '
         'cmsTray
         '
-        Me.cmsTray.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.QuitToolStripMenuItem})
+        Me.cmsTray.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SaveLocationToolStripMenuItem, ToolStripSeparator1, Me.QuitToolStripMenuItem})
         Me.cmsTray.Name = "cmsTray"
-        Me.cmsTray.Size = New System.Drawing.Size(98, 26)
+        Me.cmsTray.Size = New System.Drawing.Size(181, 76)
+        '
+        'SaveLocationToolStripMenuItem
+        '
+        Me.SaveLocationToolStripMenuItem.Checked = Global.GhostClipper.My.MySettings.Default.SaveLoc
+        Me.SaveLocationToolStripMenuItem.CheckOnClick = True
+        Me.SaveLocationToolStripMenuItem.Name = "SaveLocationToolStripMenuItem"
+        Me.SaveLocationToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SaveLocationToolStripMenuItem.Text = "Save Location"
+        Me.SaveLocationToolStripMenuItem.ToolTipText = "Save the startup Location of GHOSTBUSTERS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'ToolStripSeparator1
+        '
+        ToolStripSeparator1.Name = "ToolStripSeparator1"
+        ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
         '
         'QuitToolStripMenuItem
         '
         Me.QuitToolStripMenuItem.Image = Global.GhostClipper.My.Resources.Resources.ghostbig_1_png
         Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
-        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(97, 22)
+        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.QuitToolStripMenuItem.Text = "Quit"
         '
         'frmMain
@@ -77,4 +94,5 @@ Partial Class frmMain
     Friend WithEvents trayIcon As NotifyIcon
     Friend WithEvents cmsTray As ContextMenuStrip
     Friend WithEvents QuitToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SaveLocationToolStripMenuItem As ToolStripMenuItem
 End Class

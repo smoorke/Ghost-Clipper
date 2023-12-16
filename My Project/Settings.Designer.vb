@@ -53,6 +53,30 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property SaveLoc() As Boolean
+            Get
+                Return CType(Me("SaveLoc"),Boolean)
+            End Get
+            Set
+                Me("SaveLoc") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
+        Public Property Location() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("Location"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("Location") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
