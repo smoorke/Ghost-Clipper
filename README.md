@@ -1,4 +1,4 @@
-# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/1.0.3/GhostClipper.exe)
+# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/1.0.4/GhostClipper.exe)
  Clip Mouse Cursor to Windowed GHOSTBUSTERS
  
  To set GHOSTBUSTERS to run in windowed mode, follow these steps:
@@ -12,7 +12,8 @@
 
  You can run GhostClipper before or after you have started GHOSTBUSTERS.
  
- To exit GhostClipper, right-click the GhostBuster icon in the system tray.
+ To exit GhostClipper, right-click the GhostBuster icon in the system tray and select Quit. 
+ You will also find an option to save the startup location there.
  
  To move the GOSTBUSTERS window with GhostClipper running, press the Windows key, then drag the GHOSTBUSTERS caption.
  
