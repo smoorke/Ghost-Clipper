@@ -3,12 +3,25 @@ Imports System.Runtime.InteropServices
 
 Public Class frmMain
     Private m_clsMouseHook As MouseHook = New MouseHook
+    Private gbSupported As Boolean = False
+
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim osVer As Version = Environment.OSVersion.Version
+        If osVer.Major >= 10 AndAlso osVer.Build >= 10586 Then
+            gbSupported = True
+        End If
         m_clsMouseHook.HookMouse()
         trayIcon.Visible = True
     End Sub
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         m_clsMouseHook.UnhookMouse()
+    End Sub
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs)
+        If gbSupported Then
+            If Windows.Gaming.UI.GameBar.IsInputRedirected Then
+                'hanndle stuff here
+            End If
+        End If
     End Sub
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         Try
@@ -19,7 +32,11 @@ Public Class frmMain
                     Exit For
                 End If
             Next
-            m_clsMouseHook.hwnd = hwnd
+
+            If gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected Then
+                hwnd = IntPtr.Zero
+            End If
+
             If hwnd <> IntPtr.Zero Then
 
                 Dim rcW As RECT
@@ -43,6 +60,7 @@ Public Class frmMain
 
                 GetClientRect(hwnd, m_clsMouseHook.rcC)
             End If
+            m_clsMouseHook.hwnd = hwnd
         Catch ex As Exception
             m_clsMouseHook.hwnd = IntPtr.Zero
         End Try
