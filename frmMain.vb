@@ -6,6 +6,14 @@ Public Class frmMain
     Private gbSupported As Boolean = False
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        If New Version(My.Settings.Version) < My.Application.Info.Version Then
+            My.Settings.Upgrade()
+            My.Settings.Version = My.Application.Info.Version.ToString
+            My.Settings.Save()
+            SaveLocationToolStripMenuItem.Checked = My.Settings.SaveLoc
+        End If
+
         Dim osVer As Version = Environment.OSVersion.Version
         If osVer.Major >= 10 AndAlso osVer.Build >= 10586 Then
             gbSupported = True
