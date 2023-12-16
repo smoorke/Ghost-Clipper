@@ -293,13 +293,15 @@ Public Class MouseHook : Implements IDisposable
               (ByVal idHook As Integer) As Boolean
     End Function
 
-    <StructLayout(LayoutKind.Sequential)>
-    Public Structure MouseHookStruct
-        Public pt As Point
-        Public hwnd As Integer
-        Public wHitTestCode As Integer
-        Public dwExtraInfo As Integer
-    End Structure
+    'We only care about the first member so we marshal directly to a point
+    '<StructLayout(LayoutKind.Sequential)>
+    'Public Structure LLMouseHookStruct
+    '    Public pt As Point
+    '    Public mousedata As UInteger
+    '    Public flags As UInteger
+    '    Public time As UInteger
+    '    Public dwExtraInfo As ULong
+    'End Structure
 
     Public hwnd As IntPtr = IntPtr.Zero
     Friend rcC As RECT
@@ -316,7 +318,9 @@ Public Class MouseHook : Implements IDisposable
                     If hwnd = IntPtr.Zero Then Exit Select
                     If hwnd <> GetForegroundWindow() Then Exit Select 'GetForegroundWindow() can be IntPtr.Zero when switching active app
 
-                    Dim uInfo As MouseHookStruct = Marshal.PtrToStructure(lParam, GetType(MouseHookStruct))
+                    'Dim uInfo As LLMouseHookStruct = Marshal.PtrToStructure(lParam, GetType(LLMouseHookStruct))
+                    'We only care about the first member so we marshal directly to a point
+                    Dim cpos As Point = Marshal.PtrToStructure(Of Point)(lParam) 'cursor position
 
                     'top left corner
                     Dim ptCTL = New Point(0, 0)
@@ -326,33 +330,33 @@ Public Class MouseHook : Implements IDisposable
                     Dim ptCBR = New Point(rcC.right - 1, rcC.bottom) 'needs -1 or right border gets stuck
                     ClientToScreen(hwnd, ptCBR)
 
-                    If uInfo.pt.X < ptCTL.X AndAlso uInfo.pt.Y < ptCTL.Y Then 'top left corner
+                    If cpos.X < ptCTL.X AndAlso cpos.Y < ptCTL.Y Then 'top left corner
                         Cursor.Position = ptCTL 'New Point(ptCTL.X, ptCTL.Y)
                         Return 1
-                    ElseIf uInfo.pt.X > ptCBR.X AndAlso uInfo.pt.Y < ptCTL.Y Then 'top right corner
+                    ElseIf cpos.X > ptCBR.X AndAlso cpos.Y < ptCTL.Y Then 'top right corner
                         Cursor.Position = New Point(ptCBR.X, ptCTL.Y)
                         Return 1
-                    ElseIf uInfo.pt.X > ptCBR.X AndAlso uInfo.pt.Y > ptCBR.Y Then 'bottom right corner
+                    ElseIf cpos.X > ptCBR.X AndAlso cpos.Y > ptCBR.Y Then 'bottom right corner
                         Cursor.Position = ptCBR 'New Point(ptCBR.X, ptCBR.Y)
                         Return 1
-                    ElseIf uInfo.pt.X < ptCTL.X AndAlso uInfo.pt.Y > ptCBR.Y Then 'bottom left corner
+                    ElseIf cpos.X < ptCTL.X AndAlso cpos.Y > ptCBR.Y Then 'bottom left corner
                         Cursor.Position = New Point(ptCTL.X, ptCBR.Y)
                         Return 1
-                    ElseIf uInfo.pt.X < ptCTL.X Then 'left border
-                        Cursor.Position = New Point(ptCTL.X, uInfo.pt.Y)
+                    ElseIf cpos.X < ptCTL.X Then 'left border
+                        Cursor.Position = New Point(ptCTL.X, cpos.Y)
                         Return 1
-                    ElseIf uInfo.pt.X > ptCBR.X Then 'right border
-                        Cursor.Position = New Point(ptCBR.X, uInfo.pt.Y)
+                    ElseIf cpos.X > ptCBR.X Then 'right border
+                        Cursor.Position = New Point(ptCBR.X, cpos.Y)
                         Return 1
-                    ElseIf uInfo.pt.Y < ptCTL.Y Then 'top border with exception to be able to drag window
+                    ElseIf cpos.Y < ptCTL.Y Then 'top border with exception to be able to drag window
                         Dim pci As New CURSORINFO With {.cbSize = Runtime.InteropServices.Marshal.SizeOf(GetType(CURSORINFO))}
                         GetCursorInfo(pci)
-                        If pci.flags = 0 Then
-                            Cursor.Position = New Point(uInfo.pt.X, ptCTL.Y)
+                        If pci.flags = 0 Then 'Cursor is not visible
+                            Cursor.Position = New Point(cpos.X, ptCTL.Y)
                             Return 1
                         End If
-                    ElseIf uInfo.pt.Y > ptCBR.Y Then 'bottom border
-                        Cursor.Position = New Point(uInfo.pt.X, ptCBR.Y)
+                    ElseIf cpos.Y > ptCBR.Y Then 'bottom border
+                        Cursor.Position = New Point(cpos.X, ptCBR.Y)
                         Return 1
                     End If
 
