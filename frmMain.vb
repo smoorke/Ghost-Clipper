@@ -63,15 +63,6 @@ Module Native
             Me.right = right
             Me.bottom = bottom
         End Sub
-        Public Sub New(ByVal rct As Rectangle)
-            Me.New(rct.Left, rct.Top, rct.Right, rct.Bottom)
-        End Sub
-        Public Function ToRectangle() As Rectangle
-            Return Rectangle.FromLTRB(Me.left, Me.top, Me.right, Me.bottom)
-        End Function
-        Public Overrides Function ToString() As String
-            Return $"{{{Me.left},{Me.top},{Me.right},{Me.bottom}}}"
-        End Function
     End Structure
     <StructLayout(LayoutKind.Sequential)>
     Public Structure CURSORINFO
@@ -84,31 +75,31 @@ Module Native
     Public Function GetCursorInfo(ByRef pci As CURSORINFO) As Boolean : End Function
     <DllImport("user32.dll")>
     Public Function ClientToScreen(ByVal hWnd As IntPtr, ByRef lpPoint As Point) As Boolean : End Function
-    <Flags()>
-    Public Enum WindowStyles As Long
-        WS_BORDER = &H800000
-        WS_CAPTION = &HC00000
-        WS_CHILD = &H40000000
-        WS_CLIPCHILDREN = &H2000000
-        WS_CLIPSIBLINGS = &H4000000
-        WS_DISABLED = &H8000000
-        WS_DLGFRAME = &H400000
-        WS_GROUP = &H20000
-        WS_HSCROLL = &H100000
-        WS_MAXIMIZE = &H1000000
-        WS_MAXIMIZEBOX = &H10000
-        WS_MINIMIZE = &H20000000
-        WS_MINIMIZEBOX = &H20000
-        WS_OVERLAPPED = &H0
-        WS_OVERLAPPEDWINDOW = WS_OVERLAPPED Or WS_CAPTION Or WS_SYSMENU Or WS_SIZEFRAME Or WS_MINIMIZEBOX Or WS_MAXIMIZEBOX
-        WS_POPUP = &H80000000UI
-        WS_POPUPWINDOW = WS_POPUP Or WS_BORDER Or WS_SYSMENU
-        WS_SIZEFRAME = &H40000
-        WS_SYSMENU = &H80000
-        WS_TABSTOP = &H10000
-        WS_VISIBLE = &H10000000
-        WS_VSCROLL = &H200000
-    End Enum
+    '<Flags()>
+    'Public Enum WindowStyles As Long
+    '    WS_BORDER = &H800000
+    '    WS_CAPTION = &HC00000
+    '    WS_CHILD = &H40000000
+    '    WS_CLIPCHILDREN = &H2000000
+    '    WS_CLIPSIBLINGS = &H4000000
+    '    WS_DISABLED = &H8000000
+    '    WS_DLGFRAME = &H400000
+    '    WS_GROUP = &H20000
+    '    WS_HSCROLL = &H100000
+    '    WS_MAXIMIZE = &H1000000
+    '    WS_MAXIMIZEBOX = &H10000
+    '    WS_MINIMIZE = &H20000000
+    '    WS_MINIMIZEBOX = &H20000
+    '    WS_OVERLAPPED = &H0
+    '    WS_OVERLAPPEDWINDOW = WS_OVERLAPPED Or WS_CAPTION Or WS_SYSMENU Or WS_SIZEFRAME Or WS_MINIMIZEBOX Or WS_MAXIMIZEBOX
+    '    WS_POPUP = &H80000000UI
+    '    WS_POPUPWINDOW = WS_POPUP Or WS_BORDER Or WS_SYSMENU
+    '    WS_SIZEFRAME = &H40000
+    '    WS_SYSMENU = &H80000
+    '    WS_TABSTOP = &H10000
+    '    WS_VISIBLE = &H10000000
+    '    WS_VSCROLL = &H200000
+    'End Enum
     <Flags()>
     Public Enum WindowStylesEx As UInteger
         ''' <summary>Specifies a window that accepts drag-drop files.</summary>
