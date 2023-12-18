@@ -6,6 +6,12 @@ Public Class frmMain
     Private gbSupported As Boolean = False
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim osVer As Version = Environment.OSVersion.Version
+        If osVer.Major >= 10 AndAlso osVer.Build >= 10586 Then
+            gbSupported = True
+        End If
+        m_clsMouseHook.HookMouse()
+        trayIcon.Visible = True
 
         If New Version(My.Settings.Version) < My.Application.Info.Version Then
             My.Settings.Upgrade()
@@ -13,13 +19,6 @@ Public Class frmMain
             My.Settings.Save()
             SaveLocationToolStripMenuItem.Checked = My.Settings.SaveLoc
         End If
-
-        Dim osVer As Version = Environment.OSVersion.Version
-        If osVer.Major >= 10 AndAlso osVer.Build >= 10586 Then
-            gbSupported = True
-        End If
-        m_clsMouseHook.HookMouse()
-        trayIcon.Visible = True
     End Sub
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         m_clsMouseHook.UnhookMouse()
