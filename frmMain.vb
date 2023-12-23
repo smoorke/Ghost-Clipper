@@ -2,16 +2,15 @@
 Imports System.Runtime.InteropServices
 
 Public Class frmMain
-    Private m_clsMouseHook As MouseHook = New MouseHook
+
     Private gbSupported As Boolean = False
+    Private m_clsMouseHook As MouseHook = New MouseHook
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim osVer As Version = Environment.OSVersion.Version
-        If osVer.Major >= 10 AndAlso osVer.Build >= 10586 Then
-            gbSupported = True
-        End If
+
+        If Environment.OSVersion.Version >= New Version("10.0.10586") Then gbSupported = True
+
         m_clsMouseHook.HookMouse()
-        trayIcon.Visible = True
 
         If New Version(My.Settings.Version) < My.Application.Info.Version Then
             My.Settings.Upgrade()
@@ -19,30 +18,33 @@ Public Class frmMain
             My.Settings.Save()
             SaveLocationToolStripMenuItem.Checked = My.Settings.SaveLoc
         End If
+
     End Sub
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         m_clsMouseHook.UnhookMouse()
     End Sub
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs)
-        If gbSupported Then
-            If Windows.Gaming.UI.GameBar.IsInputRedirected Then
-                'hanndle stuff here
-            End If
-        End If
-    End Sub
-    Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
-        Try
-            Dim hwnd = IntPtr.Zero
-            For Each pp As Process In Process.GetProcessesByName("ghost")
-                If pp.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then
-                    hwnd = pp.MainWindowHandle
-                    Exit For
-                End If
-            Next
 
-            If gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected Then
-                hwnd = IntPtr.Zero
+    Private gbProc As Process
+    Private newLatch = False
+
+    Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
+        Try 'We try here since Process.HasExited() will except when Process is elevated
+            Dim hwnd = IntPtr.Zero
+            If gbProc Is Nothing OrElse gbProc.HasExited() Then
+                For Each pp As Process In Process.GetProcessesByName("ghost")
+                    If pp.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then
+                        hwnd = pp.MainWindowHandle
+                        gbProc = pp
+                        newLatch = True
+                        Exit For
+                    End If
+                Next
+            Else
+                hwnd = gbProc.MainWindowHandle
+                newLatch = False
             End If
+
+            If gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected Then hwnd = IntPtr.Zero
 
             If hwnd <> IntPtr.Zero Then
 
@@ -50,16 +52,31 @@ Public Class frmMain
                 GetWindowRect(hwnd, rcW)
                 Dim ptC As New Point(0, 0)
                 ClientToScreen(hwnd, ptC)
+
+                Dim scr = Screen.FromPoint(ptC)
+                Dim sb = scr.Bounds
+
                 If ptC.X <> rcW.left AndAlso ptC.Y <> rcW.top Then 'GB is windowed
                     If My.Settings.SaveLoc Then
-                        If rcW.left = 0 AndAlso rcW.top = 0 Then   'GB is at top left
-                            SetWindowPos(hwnd, SWP_HWND.TOP, My.Settings.Location.X, My.Settings.Location.Y,
-                                    -1, -1, SetWindowPosFlags.IgnoreResize)
-                        ElseIf Not MouseButtons.HasFlag(MouseButtons.Left) Then 'User is not dragging window
+                        If rcW.left = sb.X AndAlso rcW.top = sb.Y Then 'GB is at top left of screen
+                            If sb.Location <> My.Settings.Location Then 'Don't restore when saved location is top left
+                                SetWindowPos(hwnd, SWP_HWND.TOP, My.Settings.Location.X, My.Settings.Location.Y,
+                                    -1, -1, SetWindowPosFlags.IgnoreResize Or SetWindowPosFlags.DoNotActivate)
+                            End If
+                        ElseIf Not newLatch Then 'Don't save Location on startup, it can be wrong when GB is on secondary monitors
                             Dim newloc = New Point(rcW.left, rcW.top)
                             If newloc <> My.Settings.Location Then
                                 My.Settings.Location = newloc
-                                My.Settings.Save()
+                                If Not MouseButtons.HasFlag(MouseButtons.Left) Then My.Settings.Save() 'User is not dragging window
+                            End If
+                        End If
+                    Else 'My.Settings.SaveLoc
+                        If rcW.left = sb.X AndAlso rcW.top = sb.Y Then 'GB is at top left of screen
+                            Dim wa = scr.WorkingArea
+                            Dim newloc = New Point(Math.Max(sb.X, wa.X), Math.Max(sb.Y, wa.Y)) 'fix taskbar overlap if it is at top or left
+                            If newloc <> New Point(rcW.left, rcW.top) Then
+                                SetWindowPos(hwnd, SWP_HWND.TOP, newloc.X, newloc.Y,
+                                    -1, -1, SetWindowPosFlags.IgnoreResize Or SetWindowPosFlags.DoNotActivate)
                             End If
                         End If
                     End If
@@ -69,6 +86,7 @@ Public Class frmMain
             End If
             m_clsMouseHook.hwnd = hwnd
         Catch ex As Exception
+            gbProc = Nothing
             m_clsMouseHook.hwnd = IntPtr.Zero
         End Try
     End Sub
@@ -406,41 +424,21 @@ Public Class MouseHook : Implements IDisposable
     Private Const WH_MOUSE_LL As Integer = 14
     Private Const WM_MOUSEMOVE As Integer = &H200
 
-    Public Delegate Function MouseHookCallBack(
-        ByVal nCode As Integer,
-        ByVal wParam As IntPtr,
-        ByVal lParam As IntPtr) As Integer
+    Public Delegate Function MouseHookCallBack(nCode As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
 
-    Public Declare Function GetModuleHandle Lib "kernel32.dll" _
-    Alias "GetModuleHandleA" (
-    ByVal ModuleName As String) As IntPtr
+    <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, CallingConvention:=CallingConvention.StdCall)>
+    Public Shared Function GetModuleHandle(ByVal ModuleName As String) As IntPtr : End Function
 
     <DllImport("User32.dll", CharSet:=CharSet.Auto, CallingConvention:=CallingConvention.StdCall)>
-    Public Overloads Shared Function SetWindowsHookEx _
-          (ByVal idHook As Integer, ByVal HookProc As MouseHookCallBack,
-           ByVal hInstance As IntPtr, ByVal wParam As Integer) As Integer
-    End Function
+    Public Shared Function SetWindowsHookEx(idHook As Integer, HookProc As MouseHookCallBack,
+           hInstance As IntPtr, ThreadId As Integer) As Integer : End Function
 
     <DllImport("User32.dll", CharSet:=CharSet.Auto, CallingConvention:=CallingConvention.StdCall)>
-    Public Overloads Shared Function CallNextHookEx _
-          (ByVal idHook As Integer, ByVal nCode As Integer,
-           ByVal wParam As IntPtr, ByVal lParam As IntPtr) As Integer
-    End Function
+    Public Shared Function CallNextHookEx(idHook As Integer, nCode As Integer,
+           wParam As IntPtr, lParam As IntPtr) As Integer : End Function
 
     <DllImport("User32.dll", CharSet:=CharSet.Auto, CallingConvention:=CallingConvention.StdCall)>
-    Public Overloads Shared Function UnhookWindowsHookEx _
-              (ByVal idHook As Integer) As Boolean
-    End Function
-
-    'We only care about the first member so we marshal directly to a point
-    '<StructLayout(LayoutKind.Sequential)>
-    'Public Structure LLMouseHookStruct
-    '    Public pt As Point
-    '    Public mousedata As UInteger
-    '    Public flags As UInteger
-    '    Public time As UInteger
-    '    Public dwExtraInfo As ULong
-    'End Structure
+    Public Shared Function UnhookWindowsHookEx(idHook As Integer) As Boolean : End Function
 
     Public hwnd As IntPtr = IntPtr.Zero
     Friend rcC As RECT
@@ -457,7 +455,6 @@ Public Class MouseHook : Implements IDisposable
                     If hwnd = IntPtr.Zero Then Exit Select
                     If hwnd <> GetForegroundWindow() Then Exit Select 'GetForegroundWindow() can be IntPtr.Zero when switching active app
 
-                    'Dim uInfo As LLMouseHookStruct = Marshal.PtrToStructure(lParam, GetType(LLMouseHookStruct))
                     'We only care about the first member so we marshal directly to a point
                     Dim cpos As Point = Marshal.PtrToStructure(Of Point)(lParam) 'cursor position
 
@@ -487,6 +484,9 @@ Public Class MouseHook : Implements IDisposable
                     ElseIf cpos.X > ptCBR.X Then 'right border
                         Cursor.Position = New Point(ptCBR.X, cpos.Y)
                         Return 1
+                    ElseIf cpos.Y > ptCBR.Y Then 'bottom border
+                        Cursor.Position = New Point(cpos.X, ptCBR.Y)
+                        Return 1
                     ElseIf cpos.Y < ptCTL.Y Then 'top border with exception to be able to drag window
                         Dim pci As New CURSORINFO With {.cbSize = Runtime.InteropServices.Marshal.SizeOf(GetType(CURSORINFO))}
                         GetCursorInfo(pci)
@@ -494,11 +494,7 @@ Public Class MouseHook : Implements IDisposable
                             Cursor.Position = New Point(cpos.X, ptCTL.Y)
                             Return 1
                         End If
-                    ElseIf cpos.Y > ptCBR.Y Then 'bottom border
-                        Cursor.Position = New Point(cpos.X, ptCBR.Y)
-                        Return 1
                     End If
-
             End Select
         End If
 
@@ -509,15 +505,9 @@ Public Class MouseHook : Implements IDisposable
     Private disposedValue As Boolean
 
     Public Sub HookMouse()
-        'm_clsMouseHookCallBack()
-        m_iMouseHandle = SetWindowsHookEx(WH_MOUSE_LL,
-            m_clsMouseHookCallBack,
+        m_iMouseHandle = SetWindowsHookEx(WH_MOUSE_LL, m_clsMouseHookCallBack,
             GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName), 0)
-        If m_iMouseHandle = 0 Then
-            Throw New System.Exception("Mouse hook failed.")
-            'Else
-            '    GC.KeepAlive(m_clsMouseHookCallBack)
-        End If
+        If m_iMouseHandle = 0 Then Throw New System.Exception("Mouse hook failed")
     End Sub
 
     Public Sub UnhookMouse()

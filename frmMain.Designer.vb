@@ -37,7 +37,7 @@ Partial Class frmMain
         'tmrTick
         '
         Me.tmrTick.Enabled = True
-        Me.tmrTick.Interval = 750
+        Me.tmrTick.Interval = 666
         '
         'trayIcon
         '
