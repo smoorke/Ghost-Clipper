@@ -1,4 +1,4 @@
-# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/1.0.7/GhostClipper.exe)
+# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/1.0.8/GhostClipper.exe)
 ### Clip Mouse Cursor to Windowed GHOSTBUSTERS: The Video Game (Remastered)
  
  To set GHOSTBUSTERS to run in windowed mode, follow these steps:
