@@ -44,7 +44,8 @@ Public Class frmMain
                 newLatch = False
             End If
 
-            If gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected Then hwnd = IntPtr.Zero
+            If hwnd <> IntPtr.Zero AndAlso IsIconic(hwnd) AndAlso
+                gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected Then hwnd = IntPtr.Zero
 
             If hwnd <> IntPtr.Zero Then
 
@@ -210,7 +211,8 @@ Module Native
                                  ByVal uFlags As SetWindowPosFlags) As Boolean
     End Function
 #End Region
-
+    <DllImport("user32.dll")>
+    Public Function IsIconic(hWnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean : End Function
     <DllImport("user32.dll")>
     Public Function GetForegroundWindow() As IntPtr : End Function
     <DllImport("user32.dll")>
