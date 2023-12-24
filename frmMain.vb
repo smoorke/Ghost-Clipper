@@ -46,6 +46,10 @@ Public Class frmMain
 
             If hwnd <> IntPtr.Zero AndAlso IsIconic(hwnd) AndAlso
                 gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected Then hwnd = IntPtr.Zero
+            If hwnd <> IntPtr.Zero Then
+                gbProc.Refresh()
+                If Not gbProc.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then hwnd = IntPtr.Zero 'sysmenu is open
+            End If
 
             If hwnd <> IntPtr.Zero Then
 
