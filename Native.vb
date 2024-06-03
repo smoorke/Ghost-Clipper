@@ -21,7 +21,7 @@ Module Native
         ''' </summary>
         TOPMOST = -1
     End Enum
-
+    Public Const WM_DWMCOLORIZATIONCOLORCHANGED = &H320
     <Flags>
     Public Enum SetWindowPosFlags As UInteger
         ''' <summary>If the calling thread and the thread that owns the window are attached to different input queues,

@@ -16,6 +16,10 @@
             SaveLocationToolStripMenuItem.Checked = My.Settings.SaveLoc
         End If
 
+        cmsTray.Renderer = New ToolStripProfessionalRenderer(New ThemedColorTable)
+        If WinUsingDarkTheme() Then ThemedColorTable.darkMode = True
+        cmsTray.ForeColor = If(ThemedColorTable.darkMode, Color.White, Color.Black)
+
     End Sub
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         m_clsMouseHook.UnhookMouse()
@@ -98,6 +102,26 @@
     Private Sub QuitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles QuitToolStripMenuItem.Click
         Me.Close()
     End Sub
+
+    Private themechanging As Boolean = False
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        Select Case m.Msg
+            Case WM_DWMCOLORIZATIONCOLORCHANGED
+                If Not themechanging Then
+                    themechanging = True
+
+                    ThemedColorTable.darkMode = WinUsingDarkTheme()
+                    cmsTray.ForeColor = If(ThemedColorTable.darkMode, Color.White, Color.Black)
+
+                    Task.Run(Sub()
+                                 Threading.Thread.Sleep(7500)
+                                 themechanging = False
+                             End Sub)
+                End If
+        End Select
+        MyBase.WndProc(m)
+    End Sub
+
     Protected Overrides ReadOnly Property CreateParams As CreateParams
         Get
             Dim cp As CreateParams = MyBase.CreateParams
