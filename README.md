@@ -1,4 +1,4 @@
-# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/1.0.8/GhostClipper.exe)
+# [GhostClipper](https://github.com/smoorke/Ghost-Clipper/releases/download/1.0.9/GhostClipper.exe)
 ### Clip Mouse Cursor to Windowed GHOSTBUSTERS: The Video Game (Remastered)
  
  To set GHOSTBUSTERS to run in windowed mode, follow these steps:
@@ -15,4 +15,4 @@
  To exit GhostClipper, right-click the GhostBuster icon in the system tray and select Quit. 
  You will also find an option to save the startup location there.
  
- To move the GOSTBUSTERS window with GhostClipper running, press the Windows key, then drag the GHOSTBUSTERS caption. <sub>(note: the mousecursor will be invisible when hovering GHOSTBUSTERS until you press the left mousebutton on the caption)</sub>
+ To move the GOSTBUSTERS window with GhostClipper running, press the Windows key, then drag the GHOSTBUSTERS caption.
