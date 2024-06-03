@@ -45,7 +45,10 @@
                 (gbSupported AndAlso Windows.Gaming.UI.GameBar.IsInputRedirected)) Then hwnd = IntPtr.Zero
             If hwnd <> IntPtr.Zero Then
                 gbProc.Refresh()
-                If Not gbProc.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then hwnd = IntPtr.Zero 'sysmenu is open
+                If Not gbProc.MainWindowTitle.StartsWith("GHOSTBUSTERS") Then
+                    If Not cursorShow Then pointer(True)
+                    hwnd = IntPtr.Zero 'sysmenu is open
+                End If
             End If
 
             If hwnd <> IntPtr.Zero Then
