@@ -34,6 +34,8 @@ Public Class MouseHook : Implements IDisposable
         ByVal wParam As IntPtr,
         ByVal lParam As IntPtr) As Integer
 
+        If nCode <> HC_ACTION Then Return CallNextHookEx(HookHandle, nCode, wParam, lParam)
+
         If (nCode = HC_ACTION) Then
             Select Case wParam.ToInt32()
                 Case WM_MOUSEMOVE
