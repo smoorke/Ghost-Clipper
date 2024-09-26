@@ -16,3 +16,5 @@
  You will also find an option to save the startup location there.
  
  To move the GOSTBUSTERS window with GhostClipper running, press the Windows key, then drag the GHOSTBUSTERS caption.
+
+<sub>GhostClipper has been reported to work with [Lossless Scaling](https://store.steampowered.com/app/993090/Lossless_Scaling/) and should be compatible with [Integer Scaler](https://tanalin.com/en/projects/integer-scaler/)
