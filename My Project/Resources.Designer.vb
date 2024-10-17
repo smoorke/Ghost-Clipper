@@ -63,9 +63,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property ghostbig_1_png() As System.Drawing.Bitmap
+        Friend ReadOnly Property ghostTransp() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("ghostbig-1.png", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("ghostTransp", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

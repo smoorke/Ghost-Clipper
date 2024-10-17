@@ -67,7 +67,7 @@ Partial Class frmMain
         '
         'QuitToolStripMenuItem
         '
-        Me.QuitToolStripMenuItem.Image = Global.GhostClipper.My.Resources.Resources.ghostbig_1_png
+        Me.QuitToolStripMenuItem.Image = Global.GhostClipper.My.Resources.Resources.ghostTransp
         Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
         Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.QuitToolStripMenuItem.Text = "Quit"

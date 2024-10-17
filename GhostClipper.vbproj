@@ -48,7 +48,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ghostbig-1.png.ico</ApplicationIcon>
+    <ApplicationIcon>ghostTransp.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
@@ -134,10 +134,8 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ghostbig-1.png.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ghostbig-1.png.ico" />
+    <Content Include="ghostTransp.ico" />
+    <None Include="ghostTransp.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
